@@ -139,7 +139,6 @@ async function analyzeImage() {
 }
 */
 
-// 分析图片 - 使用模拟数据
 async function analyzeImage() {
     // 显示加载动画
     loadingOverlay.style.display = 'flex';
@@ -157,11 +156,14 @@ async function analyzeImage() {
             confidenceValue.textContent = `${confidence}%`;
             confidenceProgress.style.width = `${confidence}%`;
             
-            // 显示结果区域
-            resultSection.style.display = 'block';
+            // 首先展开容器
+            document.querySelector('.app-container').classList.add('expanded');
             
-            // 平滑滚动到结果区域
-            resultSection.scrollIntoView({ behavior: 'smooth' });
+            // 然后显示结果区域（稍微延迟以确保动画顺序）
+            setTimeout(() => {
+                resultSection.classList.add('visible');
+            }, 100);
+            
         } catch (error) {
             console.error('分析图片时出错:', error);
             alert('分析图片时出错，请重试');
@@ -171,6 +173,7 @@ async function analyzeImage() {
         }
     }, 1500); // 1.5秒的模拟延迟
 }
+
 
 // 支持粘贴图片
 document.addEventListener('paste', function(event) {

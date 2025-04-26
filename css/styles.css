@@ -23,6 +23,11 @@ body {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
     overflow: hidden;
     position: relative;
+    transition: max-width 0.5s ease;
+}
+
+.app-container.expanded {
+    max-width: 1200px;
 }
 
 /* 头部样式 */
@@ -45,9 +50,23 @@ body {
     opacity: 0.9;
 }
 
-/* 内容区域 */
+/* 内容区域 - 确保是水平布局 */
 .app-content {
     padding: 30px;
+    display: flex;
+    flex-direction: row; /* 明确指定水平方向 */
+    justify-content: center;
+    align-items: flex-start; /* 顶部对齐 */
+    gap: 20px;
+    transition: all 0.5s ease;
+}
+
+/* 主要内容区域 */
+.main-content {
+    width: 100%;
+    max-width: 840px;
+    transition: all 0.5s ease;
+    flex-shrink: 0;
 }
 
 /* 上传区域 */
@@ -138,7 +157,6 @@ body {
     margin-top: 25px;
 }
 
-
 .btn {
     padding: 14px 28px;
     border: none;
@@ -151,7 +169,6 @@ body {
     min-width: 160px;
     text-align: center;
 }
-
 
 .btn:disabled {
     opacity: 0.6;
@@ -178,18 +195,31 @@ body {
     box-shadow: 0 4px 10px rgba(74, 101, 114, 0.3);
 }
 
-
-/* 结果区域 */
+/* 右侧结果区域 - 确保水平过渡 */
 .result-section {
+    width: 0;
+    max-width: 0; /* 添加最大宽度限制 */
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    opacity: 0;
     background-color: #f8fafc;
     border-radius: 12px;
-    overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    height: fit-content;
+    align-self: flex-start; /* 确保顶部对齐 */
 }
 
+.result-section.visible {
+    width: 300px;
+    max-width: 300px; /* 同时设置最大宽度 */
+    opacity: 1;
+}
+
+/* 修改结果头部样式以匹配主题 */
 .result-header {
     padding: 20px;
-    background: linear-gradient(120deg, #3a7bd5 0%, #00d2ff 100%);
+    background: linear-gradient(120deg, #2c3e50 0%, #4a6572 100%);
     color: white;
 }
 
@@ -198,6 +228,7 @@ body {
     font-weight: 600;
 }
 
+/* 修改结果内容区域 */
 .result-content {
     padding: 20px;
 }
@@ -245,7 +276,7 @@ body {
 
 .confidence-progress {
     height: 100%;
-    background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+    background: linear-gradient(120deg, #2c3e50 0%, #4a6572 100%);
     border-radius: 4px;
     transition: width 0.5s ease;
 }
@@ -283,4 +314,10 @@ body {
     100% {
         transform: rotate(360deg);
     }
+}
+
+/* 拖拽状态 */
+.upload-area.drag-over {
+    border-color: #3a7bd5;
+    background-color: rgba(58, 123, 213, 0.05);
 }
