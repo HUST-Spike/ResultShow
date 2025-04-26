@@ -3,191 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>视觉识别模型展示</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .main-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background-color: white;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #343a40;
-        }
-        .preview-container {
-            height: 300px;
-            border: 2px dashed #dee2e6;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        .preview-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-        .result-container {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            background-color: #f1f8ff;
-            display: none;
-        }
-        .loading {
-            display: none;
-            text-align: center;
-        }
-        .confidence-bar {
-            height: 10px;
-            background-color: #e9ecef;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        .confidence-value {
-            height: 100%;
-            background-color: #4CAF50;
-            border-radius: 5px;
-        }
-    </style>
+    <title>AI 视觉识别</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="container main-container">
-        <div class="header">
-            <h1>视觉识别模型展示</h1>
-            <p class="text-muted">上传图片，获取AI模型识别结果</p>
-        </div>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>AI 视觉识别</h1>
+            <p class="subtitle">上传图片，获取智能识别结果</p>
+        </header>
         
-        <div class="preview-container" id="previewContainer">
-            <p class="text-muted" id="uploadPrompt">点击或拖拽图片到此处</p>
-            <img id="previewImage" class="preview-image" style="display: none;">
-        </div>
+        <main class="app-content">
+            <section class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p>点击或拖拽图片到此处</p>
+                    </div>
+                    <img id="previewImage" class="preview-image" style="display: none;">
+                    <input type="file" id="fileInput" accept="image/*" class="file-input">
+                </div>
+                
+                <div class="image-info" id="imageInfo" style="display: none;">
+                    <div class="info-item">
+                        <span class="info-label">文件名:</span>
+                        <span id="fileName" class="info-value">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">尺寸:</span>
+                        <span id="imageSize" class="info-value">-</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="uploadButton" class="btn btn-primary">选择图片</button>
+                    <button id="analyzeButton" class="btn btn-accent" disabled>开始识别</button>
+                </div>
+            </section>
+            
+            <section class="result-section" id="resultSection" style="display: none;">
+                <div class="result-header">
+                    <h2>识别结果</h2>
+                </div>
+                <div class="result-content">
+                    <div class="result-card">
+                        <h3>AI 识别内容</h3>
+                        <p id="predictionText" class="prediction-text">-</p>
+                        
+                        <div class="confidence-container">
+                            <div class="confidence-header">
+                                <span>置信度</span>
+                                <span id="confidenceValue">0%</span>
+                            </div>
+                            <div class="confidence-bar">
+                                <div id="confidenceProgress" class="confidence-progress" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
         
-        <div class="d-grid gap-2">
-            <input type="file" id="imageInput" accept="image/*" class="d-none">
-            <button class="btn btn-primary" id="uploadButton">选择图片</button>
-            <button class="btn btn-success" id="predictButton" disabled>开始识别</button>
-        </div>
-        
-        <div class="loading" id="loading">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">加载中...</span>
-            </div>
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="loader"></div>
             <p>正在分析图片...</p>
         </div>
-        
-        <div class="result-container" id="resultContainer">
-            <h4>识别结果</h4>
-            <p id="predictionResult">未知</p>
-            <p>置信度: <span id="confidenceValue">0%</span></p>
-            <div class="confidence-bar">
-                <div class="confidence-value" id="confidenceBar" style="width: 0%"></div>
-            </div>
-        </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        const imageInput = document.getElementById('imageInput');
-        const uploadButton = document.getElementById('uploadButton');
-        const predictButton = document.getElementById('predictButton');
-        const previewContainer = document.getElementById('previewContainer');
-        const previewImage = document.getElementById('previewImage');
-        const uploadPrompt = document.getElementById('uploadPrompt');
-        const loading = document.getElementById('loading');
-        const resultContainer = document.getElementById('resultContainer');
-        const predictionResult = document.getElementById('predictionResult');
-        const confidenceValue = document.getElementById('confidenceValue');
-        const confidenceBar = document.getElementById('confidenceBar');
-        
-        // 服务器地址 - 替换为您的AutoDL服务器地址
-        const serverUrl = 'http://your-autodl-ip:5000/predict';
-        
-        uploadButton.addEventListener('click', () => {
-            imageInput.click();
-        });
-        
-        imageInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    previewImage.src = event.target.result;
-                    previewImage.style.display = 'block';
-                    uploadPrompt.style.display = 'none';
-                    predictButton.disabled = false;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // 支持拖放功能
-        previewContainer.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            previewContainer.style.borderColor = '#4CAF50';
-        });
-        
-        previewContainer.addEventListener('dragleave', () => {
-            previewContainer.style.borderColor = '#dee2e6';
-        });
-        
-        previewContainer.addEventListener('drop', (e) => {
-            e.preventDefault();
-            previewContainer.style.borderColor = '#dee2e6';
-            const file = e.dataTransfer.files[0];
-            if (file && file.type.match('image.*')) {
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    previewImage.src = event.target.result;
-                    previewImage.style.display = 'block';
-                    uploadPrompt.style.display = 'none';
-                    predictButton.disabled = false;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        previewContainer.addEventListener('click', () => {
-            if (uploadPrompt.style.display !== 'none') {
-                imageInput.click();
-            }
-        });
-        
-        predictButton.addEventListener('click', async () => {
-            loading.style.display = 'block';
-            resultContainer.style.display = 'none';
-            
-            try {
-                const response = await axios.post(serverUrl, {
-                    image: previewImage.src
-                });
-                
-                const result = response.data;
-                predictionResult.textContent = result.prediction;
-                
-                const confidence = Math.round(result.confidence * 100);
-                confidenceValue.textContent = `${confidence}%`;
-                confidenceBar.style.width = `${confidence}%`;
-                
-                resultContainer.style.display = 'block';
-            } catch (error) {
-                alert('识别失败，请重试');
-                console.error('Error:', error);
-            } finally {
-                loading.style.display = 'none';
-            }
-        });
-    </script>
+    
+    <script src="js/main.js"></script>
 </body>
 </html>
