@@ -187,3 +187,32 @@ document.addEventListener('paste', function(event) {
         }
     }
 });
+
+
+function processFile(file) {
+    // 显示文件信息
+    fileName.textContent = file.name;
+    
+    // 创建文件预览
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        previewImage.src = e.target.result;
+        previewImage.style.display = 'block';
+        uploadPlaceholder.style.display = 'none';
+        
+        // 添加有图片的类
+        uploadArea.classList.add('has-image');
+        
+        // 获取图片尺寸
+        const img = new Image();
+        img.onload = function() {
+            imageSize.textContent = `${img.width} × ${img.height}`;
+            imageInfo.style.display = 'flex';
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    
+    // 启用分析按钮
+    analyzeButton.disabled = false;
+}
