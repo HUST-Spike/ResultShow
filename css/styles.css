@@ -8,7 +8,7 @@
 body {
     font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
     color: #333;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     min-height: 100vh;
     padding: 20px;
     line-height: 1.6;
@@ -18,9 +18,9 @@ body {
 .app-container {
     max-width: 900px;
     margin: 0 auto;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.98);
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
     overflow: hidden;
     position: relative;
 }
@@ -29,7 +29,7 @@ body {
 .app-header {
     padding: 40px;
     text-align: center;
-    background: linear-gradient(120deg, #3a7bd5 0%, #00d2ff 100%);
+    background: linear-gradient(120deg, #2c3e50 0%, #4a6572 100%);
     color: white;
 }
 
@@ -70,7 +70,7 @@ body {
 }
 
 .upload-area:hover {
-    border-color: #3a7bd5;
+    border-color: #4a6572;
     background-color: #f0f4f8;
 }
 
