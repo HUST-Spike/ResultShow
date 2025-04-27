@@ -2,20 +2,30 @@
 .panel {
     position: fixed;
     top: 0;
-    right: 0;
-    width: 400px;
-    height: 100%;
+    right: 0; /* 确保面板从右侧开始 */
+    bottom: 0;
+    width: 350px; /* 固定宽度 */
     background-color: white;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    display: flex;
+    box-shadow: -3px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    display: none;
     flex-direction: column;
-    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    transform: translateX(100%);
-    overflow: hidden;
+    transform: translateX(100%); /* 初始状态在屏幕右侧外 */
+    transition: transform 0.3s ease;
+    overflow-y: auto;
 }
 
 .panel.active {
+    transform: translateX(0); /* 移动到可见位置 */
+}
+
+/* 确保初始状态和过渡期间的一致性 */
+#historyPanel, #historyDetailPanel {
+    right: 0;
+    transform: translateX(100%);
+}
+
+#historyPanel.active, #historyDetailPanel.active {
     transform: translateX(0);
 }
 
@@ -73,21 +83,48 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-top: 15px;
 }
 
+/* 历史记录项的基础样式 */
 .history-item {
     border: 1px solid #eee;
     border-radius: 8px;
     padding: 15px;
     display: flex;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
+    position: relative;
+    
+    /* 添加这些以确保项目有平滑的进入动画 */
+    opacity: 0;
+    transform: translateX(20px);
 }
 
-.history-item:hover {
-    background-color: #f9f9f9;
-    border-color: #ddd;
+/* 历史记录项的激活状态 */
+.history-item.active {
+    opacity: 1;
+    transform: translateX(0);
 }
+
+/* 确保历史记录项有交错动画 */
+@for $i from 1 through 10 {
+    .history-item:nth-child(#{$i}) {
+        transition-delay: #{$i * 0.05}s;
+    }
+}
+
+/* 如果无法使用上面的 SASS，使用普通 CSS 实现交错动画 */
+.history-item:nth-child(1) { transition-delay: 0.05s; }
+.history-item:nth-child(2) { transition-delay: 0.10s; }
+.history-item:nth-child(3) { transition-delay: 0.15s; }
+.history-item:nth-child(4) { transition-delay: 0.20s; }
+.history-item:nth-child(5) { transition-delay: 0.25s; }
+.history-item:nth-child(6) { transition-delay: 0.30s; }
+.history-item:nth-child(7) { transition-delay: 0.35s; }
+.history-item:nth-child(8) { transition-delay: 0.40s; }
+.history-item:nth-child(9) { transition-delay: 0.45s; }
+.history-item:nth-child(10) { transition-delay: 0.50s; }
 
 .history-item-image {
     width: 80px;
@@ -102,6 +139,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 4px;
 }
 
 .history-item-content {
@@ -187,16 +225,6 @@
     to { opacity: 1; }
 }
 
-.panel {
-    /* 现有样式 */
-    animation: fadeIn 0.3s ease;
-}
-
-.history-item {
-    /* 现有样式 */
-    animation: fadeIn 0.3s ease;
-}
-
 /* 浮动按钮包装器 */
 .floating-history-btn-wrapper {
     position: relative;
@@ -221,6 +249,7 @@
     cursor: pointer;
     z-index: 99;
     transition: all 0.3s;
+    animation: pulse 2s infinite;
 }
 
 .floating-history-btn:hover {
@@ -267,11 +296,6 @@
     }
 }
 
-.floating-history-btn {
-    /* 现有样式 */
-    animation: pulse 2s infinite;
-}
-
 /* 当有新的历史记录时，可以添加这个类来强调按钮 */
 .floating-history-btn.has-new {
     animation: pulse 1.5s infinite;
@@ -312,20 +336,4 @@
     top: 0;
     line-height: 20px;
     color: #333;
-}
-
-/* 在 history.css 中添加或修改 */
-.history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-/* 确保图片正确显示 */
-.history-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
 }

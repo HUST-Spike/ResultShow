@@ -129,9 +129,11 @@ class HistoryManager {
     showHistoryPanel() {
         this.renderHistoryList();
         this.historyPanel.style.display = 'flex';
-        setTimeout(() => {
+        
+        // 关键改动：确保在设置为 flex 后立即触发重排，然后再添加 active 类
+        requestAnimationFrame(() => {
             this.historyPanel.classList.add('active');
-        }, 10);
+        });
     }
     
     // 隐藏历史记录面板
@@ -139,18 +141,12 @@ class HistoryManager {
         this.historyPanel.classList.remove('active');
         setTimeout(() => {
             this.historyPanel.style.display = 'none';
-        }, 300);
+        }, 300); // 与 CSS 过渡时间一致
     }
     
     // 渲染历史记录列表
     renderHistoryList() {
-        console.log("渲染历史记录:", this.history); // 添加这行
-        this.historyList.innerHTML = '';
-        
-        if (this.history.length === 0) {
-            this.historyEmpty.style.display = 'block';
-            return;
-        }
+        console.log("渲染历史记录:", this.history);
         this.historyList.innerHTML = '';
         
         if (this.history.length === 0) {
@@ -160,9 +156,12 @@ class HistoryManager {
         
         this.historyEmpty.style.display = 'none';
         
+        // 创建一个文档片段，提高性能
+        const fragment = document.createDocumentFragment();
+        
         this.history.forEach(item => {
             const historyItem = document.createElement('div');
-            historyItem.className = 'history-item';
+            historyItem.className = 'history-item'; // 初始没有 active 类
             historyItem.dataset.id = item.id;
             
             // 格式化日期
@@ -170,14 +169,12 @@ class HistoryManager {
             const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
             
             // 获取结果预览文本
-            // 获取结果预览文本
             let resultPreview = '';
             if (typeof item.result === 'string') {
                 resultPreview = item.result.substring(0, 100);
             } else if (item.result && item.result.text) {
                 resultPreview = item.result.text.substring(0, 100);
             } else if (item.result && item.result.prediction) {
-                // 处理包含prediction和confidence的结果
                 resultPreview = `${item.result.prediction} (置信度: ${(item.result.confidence * 100).toFixed(1)}%)`;
             }
             
@@ -202,7 +199,6 @@ class HistoryManager {
             
             // 点击项目查看详情
             historyItem.addEventListener('click', (e) => {
-                // 如果点击的是删除按钮，则不显示详情
                 if (e.target.closest('.history-item-delete')) {
                     return;
                 }
@@ -216,7 +212,19 @@ class HistoryManager {
                 this.deleteHistory(item.id);
             });
             
-            this.historyList.appendChild(historyItem);
+            fragment.appendChild(historyItem);
+        });
+        
+        // 将所有项目添加到DOM
+        this.historyList.appendChild(fragment);
+        
+        // 使用 requestAnimationFrame 让浏览器先渲染历史记录列表
+        requestAnimationFrame(() => {
+            // 然后给所有项目添加 active 类以触发动画
+            const historyItems = this.historyList.querySelectorAll('.history-item');
+            historyItems.forEach(item => {
+                item.classList.add('active');
+            });
         });
     }
     
@@ -225,9 +233,7 @@ class HistoryManager {
         const item = this.history.find(h => h.id === id);
         if (!item) return;
         
-        console.log("显示历史详情:", item); // 添加这行
-        console.log("图片URL:", item.image); // 添加这行
-    
+        console.log("显示历史详情:", item);
         
         this.currentHistory = item;
         
@@ -236,6 +242,19 @@ class HistoryManager {
         const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
         
         this.historyDetailDate.textContent = formattedDate;
+        
+        // 先设置图片的加载事件
+        this.historyDetailImage.onload = () => {
+            // 图片加载完成后再显示面板
+            this.historyDetailPanel.style.display = 'flex';
+            
+            // 确保面板正确定位
+            requestAnimationFrame(() => {
+                this.historyDetailPanel.classList.add('active');
+            });
+        };
+        
+        // 设置图片源
         this.historyDetailImage.src = item.image;
         
         // 处理结果显示
@@ -245,13 +264,11 @@ class HistoryManager {
         } else if (item.result && item.result.text) {
             resultHtml = `<pre>${item.result.text}</pre>`;
             
-            // 如果有结构化数据，也显示
             if (item.result.structured) {
                 resultHtml += '<h4>结构化数据</h4>';
                 resultHtml += `<pre>${JSON.stringify(item.result.structured, null, 2)}</pre>`;
             }
         } else if (item.result && item.result.prediction) {
-            // 处理包含prediction和confidence的结果
             resultHtml = `<div class="prediction-result">
                 <h4>预测结果</h4>
                 <p class="prediction">${item.result.prediction}</p>
@@ -267,11 +284,13 @@ class HistoryManager {
         
         this.historyDetailResult.innerHTML = resultHtml;
         
-        // 显示详情面板
-        this.historyDetailPanel.style.display = 'flex';
-        setTimeout(() => {
-            this.historyDetailPanel.classList.add('active');
-        }, 10);
+        // 如果图片已经缓存（onload可能不触发），确保显示面板
+        if (this.historyDetailImage.complete) {
+            this.historyDetailPanel.style.display = 'flex';
+            requestAnimationFrame(() => {
+                this.historyDetailPanel.classList.add('active');
+            });
+        }
     }
     
     // 隐藏详情面板
