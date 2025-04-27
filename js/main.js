@@ -93,51 +93,7 @@ function processFile(file) {
     analyzeButton.disabled = false;
 }
 
-/*
-// 分析图片
-async function analyzeImage() {
-    // 显示加载动画
-    loadingOverlay.style.display = 'flex';
-    
-    try {
-        // 发送图片到服务器
-        const response = await fetch(SERVER_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                image: previewImage.src
-            })
-        });
-        
-        if (!response.ok) {
-            throw new Error('服务器响应错误');
-        }
-        
-        const result = await response.json();
-        
-        // 显示结果
-        predictionText.textContent = result.prediction || '无法识别';
-        
-        const confidence = Math.round((result.confidence || 0) * 100);
-        confidenceValue.textContent = `${confidence}%`;
-        confidenceProgress.style.width = `${confidence}%`;
-        
-        // 显示结果区域
-        resultSection.style.display = 'block';
-        
-        // 平滑滚动到结果区域
-        resultSection.scrollIntoView({ behavior: 'smooth' });
-    } catch (error) {
-        console.error('分析图片时出错:', error);
-        alert('分析图片时出错，请重试');
-    } finally {
-        // 隐藏加载动画
-        loadingOverlay.style.display = 'none';
-    }
-}
-*/
+
 
 async function analyzeImage() {
     // 显示加载动画
@@ -164,6 +120,15 @@ async function analyzeImage() {
                 resultSection.classList.add('visible');
             }, 100);
             
+            // 保存到历史记录
+            if (window.historyManager && previewImage.src) {
+                window.historyManager.addHistory({
+                    image: previewImage.src,
+                    result: mockResult
+                });
+                console.log("已保存到历史记录");
+            }
+            
         } catch (error) {
             console.error('分析图片时出错:', error);
             alert('分析图片时出错，请重试');
@@ -173,7 +138,6 @@ async function analyzeImage() {
         }
     }, 1500); // 1.5秒的模拟延迟
 }
-
 
 // 支持粘贴图片
 document.addEventListener('paste', function(event) {
@@ -247,18 +211,18 @@ window.processHistoryImage = function(imageDataUrl) {
     const img = new Image();
     img.onload = function() {
         // 更新预览图
-        const previewImage = document.getElementById('previewImage');
         previewImage.src = imageDataUrl;
         previewImage.style.display = 'block';
+        uploadPlaceholder.style.display = 'none';
+        uploadArea.classList.add('has-image');
         
         // 更新图像信息
-        document.getElementById('imageInfo').style.display = 'block';
-        document.getElementById('fileName').textContent = '从历史记录加载';
-        document.getElementById('fileSize').textContent = '未知';
-        document.getElementById('fileType').textContent = '图像';
+        imageInfo.style.display = 'flex';
+        fileName.textContent = '从历史记录加载';
+        imageSize.textContent = `${img.width} × ${img.height}`;
         
         // 启用识别按钮
-        document.getElementById('recognizeBtn').disabled = false;
+        analyzeButton.disabled = false;
     };
     img.src = imageDataUrl;
 };

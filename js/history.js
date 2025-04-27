@@ -32,6 +32,21 @@ class HistoryManager {
         this.historyDetailDate = document.getElementById('historyDetailDate');
         this.historyDetailImage = document.getElementById('historyDetailImage');
         this.historyDetailResult = document.getElementById('historyDetailResult');
+        
+        // 如果有任何元素未找到，在控制台输出警告
+        const elements = [
+            this.historyBtn, this.closeHistoryBtn, this.clearHistoryBtn, 
+            this.exportHistoryBtn, this.closeDetailBtn, this.reprocessHistoryBtn, 
+            this.deleteHistoryBtn, this.historyPanel, this.historyDetailPanel,
+            this.historyList, this.historyEmpty, this.historyDetailDate,
+            this.historyDetailImage, this.historyDetailResult
+        ];
+        
+        elements.forEach((el, index) => {
+            if (!el) {
+                console.warn(`历史记录管理器: 元素 #${index} 未找到`);
+            }
+        });
     }
     
     initEventListeners() {

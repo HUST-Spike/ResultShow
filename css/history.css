@@ -313,3 +313,19 @@
     line-height: 20px;
     color: #333;
 }
+
+/* 在 history.css 中添加或修改 */
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+/* 确保图片正确显示 */
+.history-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
