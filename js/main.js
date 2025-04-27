@@ -229,3 +229,49 @@ function hideResults() {
     document.querySelector('.result-section').classList.remove('visible');
     document.querySelector('.app-container').classList.remove('expanded');
 }
+
+
+// 在识别完成后保存到历史记录
+function saveToHistory(imageData, result) {
+    if (window.historyManager) {
+        window.historyManager.addHistory({
+            image: imageData,
+            result: result
+        });
+    }
+}
+
+// 处理历史记录中的图像
+window.processHistoryImage = function(imageDataUrl) {
+    // 创建图像对象
+    const img = new Image();
+    img.onload = function() {
+        // 更新预览图
+        const previewImage = document.getElementById('previewImage');
+        previewImage.src = imageDataUrl;
+        previewImage.style.display = 'block';
+        
+        // 更新图像信息
+        document.getElementById('imageInfo').style.display = 'block';
+        document.getElementById('fileName').textContent = '从历史记录加载';
+        document.getElementById('fileSize').textContent = '未知';
+        document.getElementById('fileType').textContent = '图像';
+        
+        // 启用识别按钮
+        document.getElementById('recognizeBtn').disabled = false;
+    };
+    img.src = imageDataUrl;
+};
+
+// 在识别完成后调用 saveToHistory
+// 找到您的识别结果处理函数，在适当的位置添加：
+function handleRecognitionResult(result) {
+    // 显示结果
+    displayResult(result);
+    
+    // 保存到历史记录
+    const previewImage = document.getElementById('previewImage');
+    if (previewImage.src) {
+        saveToHistory(previewImage.src, result);
+    }
+}
