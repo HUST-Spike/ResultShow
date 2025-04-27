@@ -1,0 +1,39 @@
+/* 主界面置信度条样式 */
+.result-card .confidence-container {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    padding: 5px 2px;
+}
+
+.result-card .confidence-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #606f7b;
+    font-weight: 500;
+}
+
+.result-card .confidence-bar {
+    height: 10px;
+    background-color: #e2e8f0;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.result-card .confidence-progress {
+    height: 100%;
+    background: linear-gradient(120deg, #2c3e50 0%, #4a6572 100%);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+/* 调试辅助 - 临时添加明显的边框 */
+.result-card .confidence-bar {
+    border: 1px solid #ccc;
+}
+
+.result-card .confidence-progress {
+    min-width: 5px; /* 确保即使为0%时也有最小可见宽度 */
+}

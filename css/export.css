@@ -1,16 +1,20 @@
 /* 导出功能的样式 */
 .export-container {
     position: relative;
-    margin-top: 20px;
+    margin-top: 10px; /* 从20px增加到30px，提供更多间距 */
     display: flex;
     justify-content: center;
     width: 100%;
+    padding-top: 15px; /* 添加额外的内边距 */
+    border-top: 1px solid #f0f4f8; /* 可选：添加一个微妙的分隔线 */
 }
 
 #exportResultBtn {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 10px 20px; /* 可以根据需要调整，使按钮更紧凑 */
+    min-width: auto; /* 覆盖默认的最小宽度 */
 }
 
 /* 现代化的下拉菜单样式 */

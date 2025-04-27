@@ -227,6 +227,30 @@ window.processHistoryImage = function(imageDataUrl) {
     img.src = imageDataUrl;
 };
 
+// 在显示结果的函数中添加调试信息
+function displayResult(result) {
+    // 显示结果文本
+    predictionText.textContent = result.prediction;
+    
+    // 设置置信度
+    const confidencePercent = Math.round(result.confidence * 100);
+    confidenceValue.textContent = confidencePercent + '%';
+    
+    // 添加调试信息
+    console.log("设置置信度进度条宽度:", confidencePercent + "%");
+    
+    // 确保DOM已更新后再设置宽度
+    requestAnimationFrame(() => {
+        confidenceProgress.style.width = confidencePercent + '%';
+        console.log("置信度进度条当前宽度:", confidenceProgress.style.width);
+        console.log("置信度进度条元素:", confidenceProgress);
+    });
+    
+    // 显示结果区域
+    resultSection.classList.add('visible');
+    document.querySelector('.app-container').classList.add('expanded');
+}
+
 // 在识别完成后调用 saveToHistory
 // 找到您的识别结果处理函数，在适当的位置添加：
 // 在你处理识别结果的函数中，加入下面的代码

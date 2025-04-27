@@ -273,8 +273,10 @@ class HistoryManager {
                 <h4>预测结果</h4>
                 <p class="prediction">${item.result.prediction}</p>
                 <h4>置信度</h4>
-                <div class="confidence-bar-container">
-                    <div class="confidence-bar" style="width: ${item.result.confidence * 100}%"></div>
+                <div class="history-confidence-container">
+                    <div class="history-confidence-bar">
+                        <div class="history-confidence-progress" style="width: ${item.result.confidence * 100}%"></div>
+                    </div>
                     <span>${(item.result.confidence * 100).toFixed(1)}%</span>
                 </div>
             </div>`;
