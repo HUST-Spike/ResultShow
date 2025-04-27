@@ -31,33 +31,43 @@
         }
     ];
 
-    // 强制清除并重新添加所有模拟数据
     function addMockHistory() {
+        // 确保历史记录管理器已初始化
+        if (!window.historyManager) {
+            console.error('历史记录管理器尚未初始化，无法添加模拟数据');
+            // 延迟重试
+            setTimeout(addMockHistory, 500);
+            return;
+        }
+        
         const historyKey = 'ocr_history';
+        
+        // 检查模拟数据的图片格式
+        mockHistory.forEach(item => {
+            if (typeof item.image === 'string' && item.image.startsWith('data:image')) {
+                console.log(`模拟数据 ${item.id} 图片格式正确`);
+            } else {
+                console.error(`模拟数据 ${item.id} 图片格式不正确:`, item.image.substring(0, 50) + '...');
+            }
+        });
+        
         let existingHistory = localStorage.getItem(historyKey);
         let history = existingHistory ? JSON.parse(existingHistory) : [];
         
         // 先移除所有模拟数据
-        history = history.filter(item => !item.id.startsWith('mock'));
+        history = history.filter(item => !item.id || !item.id.startsWith('mock'));
         
         // 添加全部模拟数据
         history = [...mockHistory, ...history];
         
         // 保存回localStorage
         localStorage.setItem(historyKey, JSON.stringify(history));
-        console.log('已添加模拟历史记录数据，共' + mockHistory.length + '条');
         
-        // 如果历史记录管理器已初始化，刷新显示
+        // 重新加载历史记录显示
         if (window.historyManager) {
             window.historyManager.loadHistory();
-            console.log('已刷新历史记录显示');
+            console.log('已添加模拟历史记录数据，共' + mockHistory.length + '条');
+            console.log('现有历史记录总数:', history.length);
         }
-    }
-
-    // 确保DOM已加载
-    if (document.readyState === 'loading') {
-        window.addEventListener('DOMContentLoaded', addMockHistory);
-    } else {
-        addMockHistory();
     }
 })();

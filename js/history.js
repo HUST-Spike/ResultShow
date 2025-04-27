@@ -238,14 +238,14 @@ class HistoryManager {
         });
     }
     
-    // 显示历史记录详情
+        // 在 showHistoryDetail 函数中添加图片加载错误处理
     showHistoryDetail(id) {
         const item = this.history.find(h => h.id === id);
         if (!item) return;
         
         console.log("显示历史详情:", item); // 添加这行
-        console.log("图片URL:", item.image); // 添加这行
-    
+        console.log("图片URL类型:", typeof item.image); // 检查图片类型
+        console.log("图片URL长度:", item.image ? item.image.length : 0); // 检查长度
         
         this.currentHistory = item;
         
@@ -254,7 +254,21 @@ class HistoryManager {
         const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
         
         this.historyDetailDate.textContent = formattedDate;
-        this.historyDetailImage.src = item.image;
+        
+        // 添加图片加载错误处理
+        this.historyDetailImage.onerror = (e) => {
+            console.error("图片加载失败", e);
+            // 设置一个默认图片
+            this.historyDetailImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABmJLR0QA/wD/AP+gvaeTAAAA70lEQVR4nO3bMQ0AMAgAMJzfA4kRRKr4+FMj4KVFdM7MBnx31QMYExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExLbFg8AvbJIaeQAAAAASUVORK5CYII=';
+        };
+        
+        // 检查图片URL是否有效
+        if (!item.image || typeof item.image !== 'string' || item.image.length < 10) {
+            console.error("无效的图片URL", item.image);
+            this.historyDetailImage.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABmJLR0QA/wD/AP+gvaeTAAAA70lEQVR4nO3bMQ0AMAgAMJzfA4kRRKr4+FMj4KVFdM7MBnx31QMYExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExITEhMSExLbFg8AvbJIaeQAAAAASUVORK5CYII=';
+        } else {
+            this.historyDetailImage.src = item.image;
+        }
         
         // 处理结果显示
         let resultHtml = '';
@@ -381,9 +395,10 @@ class HistoryManager {
     }
 }
 
-// 在主 JS 文件加载后初始化历史记录管理器
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化历史记录管理器
     window.historyManager = new HistoryManager();
+    console.log("历史记录管理器初始化完成");
 });
 
 // 在识别完成后保存到历史记录
