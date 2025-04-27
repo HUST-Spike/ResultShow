@@ -7,36 +7,69 @@
     width: 100%;
 }
 
+#exportResultBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 现代化的下拉菜单样式 */
 .export-options {
     position: absolute;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
     background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    margin-top: 5px;
-    z-index: 10000; /* 非常高的 z-index 值确保在所有其他元素之上 */
-    width: 180px;
-    overflow: visible;
-}
-
-/* 创建特殊类，使下拉菜单附加到 body 上，避免被任何容器裁剪 */
-.body-level-dropdown {
-    position: fixed; /* 使用 fixed 定位，相对于视口 */
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    margin-top: 8px;
     z-index: 10000;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
 }
 
-/* 确保父元素不会截断子元素 */
-.result-card, .result-content {
+/* 简化按钮样式 */
+.export-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.2s;
+    position: relative;
+}
+
+/* 去除按钮之间的分隔线 */
+.export-option:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* 鼠标悬停效果 */
+.export-option:hover {
+    background-color: #f5f8fa;
+    color: #2c3e50;
+}
+
+/* 对菜单的父容器设置overflow:visible */
+.result-card, .result-content, .app-container {
     overflow: visible !important;
 }
 
-#exportResultBtn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* body级别下拉菜单 */
+.body-level-dropdown {
+    position: fixed;
+    z-index: 10000;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }

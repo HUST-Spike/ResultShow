@@ -80,10 +80,47 @@ function exportResult(format) {
             break;
             
         case 'img':
-            // 提示用户此功能需要额外库
-            alert('导出图片与结果为zip需要额外的库支持，您可以单独保存图片，并导出结果文本。');
-            // 这里可以添加使用JSZip等库打包图片和结果的代码
+            // 使用JSZip打包图片和结果
+            exportImageWithResults(imageElement.src, prediction, confidence, exportFileName);
             break;
+    }
+}
+
+// 新增：导出图片与结果为ZIP的功能
+function exportImageWithResults(imageSrc, prediction, confidence, fileName) {
+    try {
+        // 创建一个新的JSZip实例
+        const zip = new JSZip();
+        
+        // 添加结果文本文件
+        const resultText = `识别结果:\n${prediction}\n\n置信度: ${confidence}\n\n导出时间: ${new Date().toLocaleString()}`;
+        zip.file("结果.txt", resultText);
+        
+        // 将图片添加到zip中
+        // 首先需要将base64图片转为二进制
+        const base64Data = imageSrc.split(',')[1];
+        zip.file("原始图片.png", base64Data, {base64: true});
+        
+        // 生成并下载zip文件
+        zip.generateAsync({type: "blob"})
+            .then(function(content) {
+                // 使用FileSaver或内置下载方法保存文件
+                const url = URL.createObjectURL(content);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${fileName}.zip`;
+                document.body.appendChild(link);
+                link.click();
+                
+                // 清理
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                }, 100);
+            });
+    } catch(error) {
+        console.error("创建ZIP文件失败:", error);
+        alert("导出ZIP文件失败，请重试");
     }
 }
 
