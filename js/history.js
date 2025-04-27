@@ -87,15 +87,30 @@ class HistoryManager {
         });
     }
     
-    // 加载历史记录
+
     loadHistory() {
-        try {
-            const historyData = localStorage.getItem(this.historyKey);
-            this.history = historyData ? JSON.parse(historyData) : [];
-        } catch (error) {
-            console.error('Failed to load history:', error);
+        const historyKey = 'ocr_history';
+        const historyJson = localStorage.getItem(historyKey);
+        
+        if (historyJson) {
+            try {
+                this.history = JSON.parse(historyJson);
+                
+                // 按日期排序（新的在前）
+                this.history.sort((a, b) => {
+                    return new Date(b.date) - new Date(a.date);
+                });
+                
+                console.log('历史记录加载成功，共 ' + this.history.length + ' 条记录');
+            } catch (e) {
+                console.error('解析历史记录失败:', e);
+                this.history = [];
+            }
+        } else {
             this.history = [];
         }
+        
+        this.updateHistoryList();
     }
     
     // 保存历史记录
@@ -112,17 +127,20 @@ class HistoryManager {
         }
     }
     
-    // 添加新的历史记录
+
     addHistory(data) {
-        const historyItem = {
-            id: Date.now().toString(),
-            date: new Date().toISOString(),
+        const id = 'record_' + Date.now();
+        const record = {
+            id: id,
+            date: new Date().toISOString(), // 使用ISO格式确保排序正确
             image: data.image,
             result: data.result
         };
         
-        this.history.unshift(historyItem); // 添加到开头
+        this.history.unshift(record); // 新记录添加到最前面
         this.saveHistory();
+        this.updateHistoryList();
+        return record;
     }
     
     // 显示历史记录面板
