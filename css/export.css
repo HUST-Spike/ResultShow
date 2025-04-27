@@ -1,9 +1,7 @@
-/* ...existing code... */
-
 /* 导出功能的样式 */
 .export-container {
-    margin-top: 20px;
     position: relative;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -15,29 +13,21 @@
     left: 50%;
     transform: translateX(-50%);
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     margin-top: 5px;
-    z-index: 9999;
-    width: 200px;
-    overflow: hidden;
-    display: none;
+    z-index: 10000; /* 非常高的 z-index 值确保在所有其他元素之上 */
+    width: 180px;
+    overflow: visible;
 }
 
-.export-option {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 10px 15px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-}
-
-.export-option:hover {
-    background-color: #f0f0f0;
+/* 创建特殊类，使下拉菜单附加到 body 上，避免被任何容器裁剪 */
+.body-level-dropdown {
+    position: fixed; /* 使用 fixed 定位，相对于视口 */
+    z-index: 10000;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* 确保父元素不会截断子元素 */

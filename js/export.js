@@ -4,30 +4,43 @@
 const exportResultBtn = document.getElementById('exportResultBtn');
 const exportOptions = document.getElementById('exportOptions');
 
-// 导出按钮点击事件
-exportResultBtn.addEventListener('click', function(e) {
-    e.stopPropagation();
-    
-    if (exportOptions.style.display === 'none' || exportOptions.style.display === '') {
-        exportOptions.style.display = 'block';
-        console.log('显示下拉菜单'); // 调试信息
-    } else {
-        exportOptions.style.display = 'none';
-        console.log('隐藏下拉菜单'); // 调试信息
-    }
-});
-
-// 点击其他地方时隐藏导出选项
-document.addEventListener('click', function(event) {
-    if (!exportOptions.contains(event.target) && !exportResultBtn.contains(event.target)) {
-        exportOptions.style.display = 'none';
-    }
-});
-
-// 给导出选项添加点击事件
+// 在页面加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
-    const exportOptionButtons = document.querySelectorAll('.export-option');
-    exportOptionButtons.forEach(button => {
+    const exportResultBtn = document.getElementById('exportResultBtn');
+    const exportOptions = document.getElementById('exportOptions');
+    
+    // 将导出选项菜单移到 body 下，避免被容器裁剪
+    document.body.appendChild(exportOptions);
+    exportOptions.classList.add('body-level-dropdown');
+    
+    // 点击导出按钮时显示选项
+    exportResultBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        const btnRect = exportResultBtn.getBoundingClientRect();
+        
+        // 设置下拉菜单位置（相对于视口）
+        exportOptions.style.left = (btnRect.left + (btnRect.width / 2)) + 'px';
+        exportOptions.style.top = (btnRect.bottom + 5) + 'px'; // 按钮下方5px
+        exportOptions.style.transform = 'translateX(-50%)'; // 居中对齐
+        
+        // 显示或隐藏菜单
+        if (exportOptions.style.display === 'none' || exportOptions.style.display === '') {
+            exportOptions.style.display = 'block';
+        } else {
+            exportOptions.style.display = 'none';
+        }
+    });
+    
+    // 点击其他地方时隐藏选项
+    document.addEventListener('click', function(e) {
+        if (!exportOptions.contains(e.target) && !exportResultBtn.contains(e.target)) {
+            exportOptions.style.display = 'none';
+        }
+    });
+    
+    // 给导出选项添加点击事件
+    document.querySelectorAll('.export-option').forEach(button => {
         button.addEventListener('click', function() {
             const format = this.getAttribute('data-format');
             exportResult(format);
