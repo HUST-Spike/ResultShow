@@ -269,15 +269,20 @@ class HistoryManager {
                 resultHtml += `<pre>${JSON.stringify(item.result.structured, null, 2)}</pre>`;
             }
         } else if (item.result && item.result.prediction) {
+            // 修改这部分代码，删除重复的置信度标题
             resultHtml = `<div class="prediction-result">
                 <h4>预测结果</h4>
                 <p class="prediction">${item.result.prediction}</p>
-                <h4>置信度</h4>
-                <div class="history-confidence-container">
-                    <div class="history-confidence-bar">
-                        <div class="history-confidence-progress" style="width: ${item.result.confidence * 100}%"></div>
+                
+                <!-- 只保留一个置信度标题 -->
+                <div class="confidence-container">
+                    <div class="confidence-header">
+                        <span>置信度</span>
+                        <span>${(item.result.confidence * 100).toFixed(1)}%</span>
                     </div>
-                    <span>${(item.result.confidence * 100).toFixed(1)}%</span>
+                    <div class="confidence-bar">
+                        <div class="confidence-progress" style="width: ${item.result.confidence * 100}%"></div>
+                    </div>
                 </div>
             </div>`;
         } else {

@@ -194,20 +194,24 @@
     margin-top: 20px;
 }
 
-/* 详情图片区域，可以调整为更大 */
+/* 修改历史记录详情中的图片容器大小 */
 .history-detail-image {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
     background-color: #f8fafc;
     border-radius: 8px;
     overflow: hidden;
-    max-height: 300px; /* 控制最大高度 */
+    width: 80%; /* 设置为原来的80%宽度 */
+    margin-left: auto;
+    margin-right: auto; /* 左右自动边距使其居中 */
 }
 
 .history-detail-image img {
     max-width: 100%;
-    max-height: 300px;
+    max-height: 240px; /* 也减少最大高度，原来可能是300px */
     object-fit: contain;
+    display: block; /* 确保没有额外的下方空间 */
+    margin: 0 auto; /* 居中显示图片 */
 }
 
 /* 详情结果区域 */
@@ -332,53 +336,4 @@
     font-size: 20px;
     font-weight: bold;
     margin: 10px 0;
-}
-
-.confidence-bar-container {
-    margin: 10px 0;
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    height: 20px;
-    position: relative;
-}
-
-.confidence-bar {
-    background-color: #4caf50;
-    height: 100%;
-    border-radius: 4px;
-}
-
-.confidence-bar-container span {
-    position: absolute;
-    right: 5px;
-    top: 0;
-    line-height: 20px;
-    color: #333;
-}
-
-/* 历史记录详情中的置信度样式 */
-.history-confidence-container {
-    margin: 10px 0;
-    position: relative;
-}
-
-.history-confidence-bar {
-    background-color: #e0e0e0;
-    border-radius: 4px;
-    height: 20px;
-    position: relative;
-}
-
-.history-confidence-progress {
-    background-color: #4caf50;
-    height: 100%;
-    border-radius: 4px;
-}
-
-.history-confidence-container span {
-    position: absolute;
-    right: 5px;
-    top: 0;
-    line-height: 20px;
-    color: #333;
 }
