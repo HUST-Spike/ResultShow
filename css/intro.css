@@ -1,0 +1,330 @@
+/* 基础样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f0f4f8;
+    overflow-x: hidden;
+}
+
+/* 导引页容器 */
+.intro-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 头部样式 */
+.intro-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.logo-icon {
+    font-size: 2.5rem;
+    color: #3498db;
+    margin-right: 1rem;
+}
+
+.logo h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #7f8c8d;
+    margin-top: 0.5rem;
+}
+
+/* 优化卡片区域 */
+.optimization-cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    flex: 1;
+}
+
+/* 卡片样式 */
+.card {
+    flex: 1;
+    height: 450px;
+    perspective: 1000px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.8;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+}
+
+.card-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1.5rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    color: #fff;
+    z-index: 1;
+}
+
+.card-title h3 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.card-title p {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.card-back {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff;
+    transform: translateY(100%);
+}
+
+.card-back h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.card-back p {
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    color: #34495e;
+}
+
+.card-back ul {
+    list-style-type: none;
+}
+
+.card-back ul li {
+    padding: 0.5rem 0;
+    border-top: 1px solid #ecf0f1;
+    color: #2980b9;
+    font-weight: 500;
+}
+
+.card-back ul li:first-child {
+    border-top: none;
+}
+
+/* 卡片悬停效果 */
+.card:hover .card-image {
+    transform: translateY(-100%);
+    opacity: 0;
+}
+
+.card:hover .card-back {
+    transform: translateY(0);
+}
+
+/* 开始体验按钮区域 */
+.get-started-section {
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+}
+
+.get-started-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2.5rem;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    transition: all 0.3s ease;
+}
+
+.get-started-btn i {
+    margin-left: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.get-started-btn:hover {
+    background-color: #2980b9;
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+.get-started-btn:hover i {
+    transform: translateX(5px);
+}
+
+.description {
+    margin-top: 1.5rem;
+    color: #7f8c8d;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 页脚样式 */
+.intro-footer {
+    text-align: center;
+    color: #95a5a6;
+    margin-top: auto;
+    padding-top: 2rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 900px) {
+    .optimization-cards {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .card {
+        height: 350px;
+    }
+    
+    .intro-header {
+        margin-bottom: 2rem;
+    }
+    
+    .logo h1 {
+        font-size: 2rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .intro-container {
+        padding: 1rem;
+    }
+    
+    .logo-icon {
+        font-size: 2rem;
+    }
+    
+    .logo h1 {
+        font-size: 1.8rem;
+    }
+    
+    .card {
+        height: 300px;
+    }
+    
+    .card-title h3 {
+        font-size: 1.5rem;
+    }
+    
+    .card-back h3 {
+        font-size: 1.5rem;
+    }
+    
+    .get-started-btn {
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+    }
+}
+
+
+/* 页面加载动画 */
+body {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
+body.loaded {
+    opacity: 1;
+}
+
+/* 卡片入场动画 */
+.card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 按钮点击动画 */
+.get-started-btn.clicked {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* 悬停增强效果 */
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 背景渐变动画 */
+body {
+    background: linear-gradient(135deg, #f0f4f8 0%, #e6f0f8 100%);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
