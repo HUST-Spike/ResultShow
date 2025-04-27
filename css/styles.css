@@ -17,6 +17,7 @@ body {
 /* 容器样式 */
 .app-container {
     max-width: 900px;
+    max-height: 700px;
     margin: 0 auto;
     background-color: rgba(255, 255, 255, 0.98);
     border-radius: 16px;
@@ -27,7 +28,7 @@ body {
 }
 
 .app-container.expanded {
-    max-width: 1200px;
+    max-width: 950px;
 }
 
 /* 头部样式 */
@@ -66,7 +67,11 @@ body {
     width: 100%;
     max-width: 840px;
     transition: all 0.5s ease;
-    flex-shrink: 0;
+}
+
+.app-container.expanded .main-content {
+    width: calc(100% - 320px);
+    max-width: calc(100% - 320px);
 }
 
 /* 上传区域 */
@@ -74,18 +79,18 @@ body {
     margin-bottom: 30px;
 }
 
-/* 上传区域 */
+/* 上传区域 - 确保在主内容区域收缩时也能适应 */
 .upload-area {
-    height: 300px; /* 保持原有高度 */
-    width: 60%; /* 占满可用宽度 */
-    margin: 0 auto; /* 居中显示 */
+    height: 300px;
+    width: 60%;
+    margin: 0 auto;
     border: 2px dashed #d1d8e0;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden; /* 确保溢出内容被隐藏 */
+    overflow: hidden;
     transition: all 0.3s ease;
     background-color: #f8fafc;
     cursor: pointer;
@@ -141,7 +146,7 @@ body {
     cursor: pointer;
 }
 
-/* 图片信息 */
+/* 图片信息区域也需要适应 */
 .image-info {
     margin-top: 15px;
     background-color: #f8fafc;
@@ -149,8 +154,8 @@ body {
     padding: 15px;
     display: flex;
     flex-wrap: wrap;
-    width: 80%; /* 使用父容器宽度的80% */
-    margin: 0 auto; /* 居中显示 */
+    width: 80%;
+    margin: 15px auto 0;
 }
 
 .info-item {
@@ -225,14 +230,14 @@ body {
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     height: auto; /* 自动高度 */
-    min-height: 450px; /* 设置最小高度，使其更突出 */
+    min-height: 400px; /* 设置最小高度，使其更突出 */
     display: flex;
     flex-direction: column;
 }
 
 .result-section.visible {
-    width: 300px;
-    max-width: 300px;
+    width: 350px;
+    max-width: 350px;
     opacity: 1;
 }
 

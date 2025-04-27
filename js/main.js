@@ -216,3 +216,16 @@ function processFile(file) {
     // 启用分析按钮
     analyzeButton.disabled = false;
 }
+
+
+// 显示结果
+function showResults() {
+    document.querySelector('.result-section').classList.add('visible');
+    document.querySelector('.app-container').classList.add('expanded');
+}
+
+// 隐藏结果
+function hideResults() {
+    document.querySelector('.result-section').classList.remove('visible');
+    document.querySelector('.app-container').classList.remove('expanded');
+}
