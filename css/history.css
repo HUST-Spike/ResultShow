@@ -206,9 +206,9 @@
 
 /* 浮动历史记录按钮 */
 .floating-history-btn {
-    position: absolute; /* 改为绝对定位 */
-    right: 20px;
-    bottom: 70px; /* 距离容器底部的距离 */
+    position: fixed; /* 改为绝对定位 */
+    right: 70px;
+    bottom: 50px; /* 距离容器底部的距离 */
     width: 56px;
     height: 56px;
     border-radius: 50%;

@@ -18,8 +18,6 @@ class HistoryManager {
         this.closeHistoryBtn = document.getElementById('closeHistoryBtn');
         this.clearHistoryBtn = document.getElementById('clearHistoryBtn');
         this.exportHistoryBtn = document.getElementById('exportHistoryBtn');
-        this.importHistoryBtn = document.getElementById('importHistoryBtn');
-        this.importHistoryFile = document.getElementById('importHistoryFile');
         this.closeDetailBtn = document.getElementById('closeDetailBtn');
         this.reprocessHistoryBtn = document.getElementById('reprocessHistoryBtn');
         this.deleteHistoryBtn = document.getElementById('deleteHistoryBtn');
@@ -57,17 +55,7 @@ class HistoryManager {
             this.exportHistory();
         });
         
-        // 导入历史记录
-        this.importHistoryBtn.addEventListener('click', () => {
-            this.importHistoryFile.click();
-        });
-        
-        this.importHistoryFile.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                this.importHistory(e.target.files[0]);
-            }
-        });
-        
+       
         // 关闭详情面板
         this.closeDetailBtn.addEventListener('click', () => {
             this.hideDetailPanel();
@@ -317,48 +305,7 @@ class HistoryManager {
             alert('导出历史记录失败');
         }
     }
-    
-    // 导入历史记录
-    importHistory(file) {
-        const reader = new FileReader();
-        
-        reader.onload = (e) => {
-            try {
-                const importData = JSON.parse(e.target.result);
-                
-                // 验证导入数据格式
-                if (!importData.version || !importData.data || !Array.isArray(importData.data)) {
-                    throw new Error('导入的文件格式不正确');
-                }
-                
-                // 确认导入
-                if (confirm(`确定要导入 ${importData.data.length} 条历史记录吗？`)) {
-                    // 合并历史记录，避免重复
-                    const existingIds = new Set(this.history.map(item => item.id));
-                    const newRecords = importData.data.filter(item => !existingIds.has(item.id));
-                    
-                    this.history = [...newRecords, ...this.history];
-                    
-                    // 按日期排序
-                    this.history.sort((a, b) => new Date(b.date) - new Date(a.date));
-                    
-                    this.saveHistory();
-                    this.renderHistoryList();
-                    
-                    alert(`成功导入 ${newRecords.length} 条历史记录`);
-                }
-            } catch (error) {
-                console.error('Failed to import history:', error);
-                alert('导入失败：' + (error.message || '文件格式不正确'));
-            }
-        };
-        
-        reader.onerror = () => {
-            alert('读取文件失败');
-        };
-        
-        reader.readAsText(file);
-    }
+
     
     // 重新处理历史记录
     reprocessHistory() {
