@@ -277,3 +277,39 @@
     animation: pulse 1.5s infinite;
     background-color: #52c41a;
 }
+
+
+/* 可以添加到 history.css */
+.prediction-result {
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+}
+
+.prediction {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.confidence-bar-container {
+    margin: 10px 0;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    height: 20px;
+    position: relative;
+}
+
+.confidence-bar {
+    background-color: #4caf50;
+    height: 100%;
+    border-radius: 4px;
+}
+
+.confidence-bar-container span {
+    position: absolute;
+    right: 5px;
+    top: 0;
+    line-height: 20px;
+    color: #333;
+}

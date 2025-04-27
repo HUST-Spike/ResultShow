@@ -129,6 +129,13 @@ class HistoryManager {
     
     // 渲染历史记录列表
     renderHistoryList() {
+        console.log("渲染历史记录:", this.history); // 添加这行
+        this.historyList.innerHTML = '';
+        
+        if (this.history.length === 0) {
+            this.historyEmpty.style.display = 'block';
+            return;
+        }
         this.historyList.innerHTML = '';
         
         if (this.history.length === 0) {
@@ -148,11 +155,15 @@ class HistoryManager {
             const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
             
             // 获取结果预览文本
+            // 获取结果预览文本
             let resultPreview = '';
             if (typeof item.result === 'string') {
                 resultPreview = item.result.substring(0, 100);
             } else if (item.result && item.result.text) {
                 resultPreview = item.result.text.substring(0, 100);
+            } else if (item.result && item.result.prediction) {
+                // 处理包含prediction和confidence的结果
+                resultPreview = `${item.result.prediction} (置信度: ${(item.result.confidence * 100).toFixed(1)}%)`;
             }
             
             if (resultPreview.length >= 100) {
@@ -199,6 +210,10 @@ class HistoryManager {
         const item = this.history.find(h => h.id === id);
         if (!item) return;
         
+        console.log("显示历史详情:", item); // 添加这行
+        console.log("图片URL:", item.image); // 添加这行
+    
+        
         this.currentHistory = item;
         
         // 格式化日期
@@ -220,6 +235,17 @@ class HistoryManager {
                 resultHtml += '<h4>结构化数据</h4>';
                 resultHtml += `<pre>${JSON.stringify(item.result.structured, null, 2)}</pre>`;
             }
+        } else if (item.result && item.result.prediction) {
+            // 处理包含prediction和confidence的结果
+            resultHtml = `<div class="prediction-result">
+                <h4>预测结果</h4>
+                <p class="prediction">${item.result.prediction}</p>
+                <h4>置信度</h4>
+                <div class="confidence-bar-container">
+                    <div class="confidence-bar" style="width: ${item.result.confidence * 100}%"></div>
+                    <span>${(item.result.confidence * 100).toFixed(1)}%</span>
+                </div>
+            </div>`;
         } else {
             resultHtml = '<p>无识别结果</p>';
         }
@@ -329,6 +355,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 在识别完成后保存到历史记录
 function saveToHistory(imageData, result) {
+    console.log("尝试保存历史记录", window.historyManager); // 添加调试信息
+    
     if (window.historyManager) {
         window.historyManager.addHistory({
             image: imageData,
@@ -343,5 +371,7 @@ function saveToHistory(imageData, result) {
         setTimeout(() => {
             historyBtn.classList.remove('has-new');
         }, 5000);
+    } else {
+        console.error("historyManager 未初始化"); // 错误提示
     }
 }

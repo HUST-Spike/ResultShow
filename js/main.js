@@ -265,13 +265,16 @@ window.processHistoryImage = function(imageDataUrl) {
 
 // 在识别完成后调用 saveToHistory
 // 找到您的识别结果处理函数，在适当的位置添加：
+// 在你处理识别结果的函数中，加入下面的代码
 function handleRecognitionResult(result) {
     // 显示结果
     displayResult(result);
     
-    // 保存到历史记录
+    // 保存到历史记录 - 确保这行代码存在
     const previewImage = document.getElementById('previewImage');
     if (previewImage.src) {
         saveToHistory(previewImage.src, result);
+        console.log("保存历史记录"); // 添加调试信息
     }
 }
+
