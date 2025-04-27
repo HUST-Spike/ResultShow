@@ -32,30 +32,62 @@
 
 /* 面板头部区域 */
 .panel-header {
-    padding: 15px 20px; /* 保持与内容区域一致 */
+    padding: 15px 15px 15px 20px; /* 右侧内边距减少，为关闭按钮腾出空间 */
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #f8fafc;
+    position: relative; /* 添加相对定位以便绝对定位关闭按钮 */
 }
 
+/* 标题文字可以向左对齐一些 */
 .panel-header h2 {
     margin: 0;
     font-size: 1.5rem;
     color: #333;
+    flex-grow: 1; /* 让标题占据更多空间 */
 }
 
+/* 重新设计关闭按钮，使其靠右 */
 .btn-close {
     background: none;
     border: none;
     cursor: pointer;
     color: #666;
-    padding: 5px;
+    padding: 8px;
+    margin-right: -48px; /* 向右移动，超出原有内边距 */
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
 }
 
+/* 增加悬停效果 */
 .btn-close:hover {
     color: #333;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* 按下效果 */
+.btn-close:active {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* 确保SVG图标居中 */
+.btn-close svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+/* 针对特定的关闭按钮进行调整，确保位置一致 */
+#closeHistoryBtn, #closeDetailBtn {
+    position: relative;
+    right: -5px; /* 额外向右移动5px */
 }
 
 /* 面板内容区域 */
