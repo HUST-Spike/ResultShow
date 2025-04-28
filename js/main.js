@@ -144,15 +144,34 @@ async function analyzeImage(modelType = 'integrated') {
             // 随机选择一个模拟结果
             const mockResult = mockResults[Math.floor(Math.random() * mockResults.length)];
             
-            // 如果有必要，可以根据模型类型调整结果
-            // 例如：mockResult.prediction = `使用${modelType}模型: ${mockResult.prediction}`;
-            
             // 显示结果
             predictionText.textContent = mockResult.prediction;
             
             const confidence = Math.round(mockResult.confidence * 100);
             confidenceValue.textContent = `${confidence}%`;
             confidenceProgress.style.width = `${confidence}%`;
+            
+            // 设置模型信息
+            const modelTypeValue = document.getElementById('modelTypeValue');
+            switch(modelType) {
+                case 'integrated':
+                    modelTypeValue.textContent = '模型集成：准确率最高';
+                    break;
+                case 'troika':
+                    modelTypeValue.textContent = 'Troika(ViT-L/14)';
+                    break;
+                case 'dfsp-vit-l14':
+                    modelTypeValue.textContent = 'DFSP(ViT-L/14)';
+                    break;
+                case 'dfsp-vit-b32':
+                    modelTypeValue.textContent = 'DFSP(ViT-B/32)：推理最快';
+                    break;
+                default:
+                    modelTypeValue.textContent = modelType;
+            }
+            
+            // 添加模型类型到保存的结果中
+            mockResult.modelType = modelType;
             
             // 首先展开容器
             document.querySelector('.app-container').classList.add('expanded');
@@ -164,8 +183,6 @@ async function analyzeImage(modelType = 'integrated') {
             
             // 保存到历史记录
             if (window.historyManager && previewImage.src) {
-                // 添加模型类型到保存的结果中
-                mockResult.modelType = modelType; 
                 window.historyManager.addHistory({
                     image: previewImage.src,
                     result: mockResult
@@ -268,7 +285,7 @@ window.processHistoryImage = function(imageDataUrl) {
     img.src = imageDataUrl;
 };
 
-// 在显示结果的函数中添加调试信息
+// 在显示结果的函数中添加设置模型信息
 function displayResult(result) {
     // 显示结果文本
     predictionText.textContent = result.prediction;
@@ -277,15 +294,33 @@ function displayResult(result) {
     const confidencePercent = Math.round(result.confidence * 100);
     confidenceValue.textContent = confidencePercent + '%';
     
-    // 添加调试信息
-    console.log("设置置信度进度条宽度:", confidencePercent + "%");
-    
     // 确保DOM已更新后再设置宽度
     requestAnimationFrame(() => {
         confidenceProgress.style.width = confidencePercent + '%';
-        console.log("置信度进度条当前宽度:", confidenceProgress.style.width);
-        console.log("置信度进度条元素:", confidenceProgress);
     });
+    
+    // 设置模型信息
+    const modelTypeValue = document.getElementById('modelTypeValue');
+    if (result.modelType) {
+        switch(result.modelType) {
+            case 'integrated':
+                modelTypeValue.textContent = '模型集成：准确率最高';
+                break;
+            case 'troika':
+                modelTypeValue.textContent = 'Troika(ViT-L/14)';
+                break;
+            case 'dfsp-vit-l14':
+                modelTypeValue.textContent = 'DFSP(ViT-L/14)';
+                break;
+            case 'dfsp-vit-b32':
+                modelTypeValue.textContent = 'DFSP(ViT-B/32)：推理最快';
+                break;
+            default:
+                modelTypeValue.textContent = result.modelType;
+        }
+    } else {
+        modelTypeValue.textContent = '未知模型';
+    }
     
     // 显示结果区域
     resultSection.classList.add('visible');

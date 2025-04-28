@@ -77,3 +77,29 @@
 .history-detail-actions {
     margin-top: 12px; /* 减少与上方内容的间距 */
 }
+
+/* 模型信息容器样式 */
+.model-info-container {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 5px 10px;
+}
+
+.model-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #4a6572;
+}
+
+.model-info-header span:first-child {
+    font-weight: 500;
+}
+
+#modelTypeValue {
+    font-weight: 600;
+    color: #2c3e50;
+}
