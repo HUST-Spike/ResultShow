@@ -174,6 +174,21 @@
             <div class="loader"></div>
             <p>正在分析图片...</p>
         </div>
+        
+        <div id="analyzeOptions" class="export-options" style="display: none;">
+            <button data-model="integrated" class="analyze-option">
+                集成模型，准确率最高
+            </button>
+            <button data-model="dfsp-vit-l14" class="analyze-option">
+                DFSP(ViT-L/14)
+            </button>
+            <button data-model="troika" class="analyze-option">
+                Troika
+            </button>
+            <button data-model="dfsp-vit-b32" class="analyze-option">
+                DFSP(ViT-B/32)，推理速度最快
+            </button>
+        </div>
     </div>
     
     <script src="js/main.js"></script>

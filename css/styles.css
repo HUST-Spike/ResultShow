@@ -360,3 +360,58 @@ body {
     border-color: #3a7bd5;
     background-color: rgba(58, 123, 213, 0.05);
 }
+
+/* 分析选项下拉菜单样式 */
+.analyze-options {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    margin-top: 8px;
+    z-index: 10000;
+    width: 280px; /* 稍微宽一些，适应更长的文本 */
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
+    display: none;
+}
+
+/* 简化按钮样式 */
+.analyze-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 12px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+    transition: all 0.2s;
+    position: relative;
+}
+
+/* 去除按钮之间的分隔线 */
+.analyze-option:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* 鼠标悬停效果 */
+.analyze-option:hover {
+    background-color: #f5f8fa;
+    color: #2c3e50;
+}
+
+/* 添加淡入动画，如果导出选项中没有定义 */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px) translateX(-50%); }
+    to { opacity: 1; transform: translateY(0) translateX(-50%); }
+}
+
+/* 确保菜单不被容器裁剪 */
+.body-level-dropdown {
+    position: fixed;
+    z-index: 10000;
+}

@@ -34,7 +34,45 @@ fileInput.addEventListener('change', handleFileSelect);
 uploadArea.addEventListener('dragover', handleDragOver);
 uploadArea.addEventListener('dragleave', handleDragLeave);
 uploadArea.addEventListener('drop', handleDrop);
-analyzeButton.addEventListener('click', analyzeImage);
+
+// 修改事件监听器，原来的直接点击分析代码改为显示下拉菜单
+analyzeButton.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    const analyzeOptions = document.getElementById('analyzeOptions');
+    const btnRect = analyzeButton.getBoundingClientRect();
+    
+    // 设置下拉菜单位置（相对于视口）
+    analyzeOptions.style.left = (btnRect.left + (btnRect.width / 2)) + 'px';
+    analyzeOptions.style.top = (btnRect.bottom + 5) + 'px'; // 按钮下方5px
+    analyzeOptions.style.transform = 'translateX(-50%)'; // 居中对齐
+    
+    // 显示或隐藏菜单
+    if (analyzeOptions.style.display === 'none' || analyzeOptions.style.display === '') {
+        analyzeOptions.style.display = 'block';
+    } else {
+        analyzeOptions.style.display = 'none';
+    }
+});
+
+// 点击其他地方时隐藏选项
+document.addEventListener('click', function(e) {
+    const analyzeOptions = document.getElementById('analyzeOptions');
+    if (analyzeOptions && !analyzeOptions.contains(e.target) && !analyzeButton.contains(e.target)) {
+        analyzeOptions.style.display = 'none';
+    }
+});
+
+// 给分析选项添加点击事件
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.analyze-option').forEach(button => {
+        button.addEventListener('click', function() {
+            const modelType = this.getAttribute('data-model');
+            analyzeImage(modelType);
+            document.getElementById('analyzeOptions').style.display = 'none';
+        });
+    });
+});
 
 // 文件处理函数
 function handleFileSelect(event) {
@@ -93,17 +131,21 @@ function processFile(file) {
     analyzeButton.disabled = false;
 }
 
-
-
-async function analyzeImage() {
+async function analyzeImage(modelType = 'integrated') {
     // 显示加载动画
     loadingOverlay.style.display = 'flex';
+    
+    // 记录选择的模型类型（可以用于后续处理）
+    console.log(`使用模型: ${modelType}`);
     
     // 模拟网络延迟
     setTimeout(() => {
         try {
             // 随机选择一个模拟结果
             const mockResult = mockResults[Math.floor(Math.random() * mockResults.length)];
+            
+            // 如果有必要，可以根据模型类型调整结果
+            // 例如：mockResult.prediction = `使用${modelType}模型: ${mockResult.prediction}`;
             
             // 显示结果
             predictionText.textContent = mockResult.prediction;
@@ -122,6 +164,8 @@ async function analyzeImage() {
             
             // 保存到历史记录
             if (window.historyManager && previewImage.src) {
+                // 添加模型类型到保存的结果中
+                mockResult.modelType = modelType; 
                 window.historyManager.addHistory({
                     image: previewImage.src,
                     result: mockResult
@@ -152,7 +196,6 @@ document.addEventListener('paste', function(event) {
     }
 });
 
-
 function processFile(file) {
     // 显示文件信息
     fileName.textContent = file.name;
@@ -181,7 +224,6 @@ function processFile(file) {
     analyzeButton.disabled = false;
 }
 
-
 // 显示结果
 function showResults() {
     document.querySelector('.result-section').classList.add('visible');
@@ -193,7 +235,6 @@ function hideResults() {
     document.querySelector('.result-section').classList.remove('visible');
     document.querySelector('.app-container').classList.remove('expanded');
 }
-
 
 // 在识别完成后保存到历史记录
 function saveToHistory(imageData, result) {
@@ -265,4 +306,24 @@ function handleRecognitionResult(result) {
         console.log("保存历史记录"); // 添加调试信息
     }
 }
+
+// 在文件结尾添加初始化代码
+document.addEventListener('DOMContentLoaded', function() {
+    // 确保分析选项被移到body下
+    const analyzeOptions = document.getElementById('analyzeOptions');
+    if (analyzeOptions) {
+        document.body.appendChild(analyzeOptions);
+    }
+    
+    // 初始化分析选项的点击事件
+    document.querySelectorAll('.analyze-option').forEach(button => {
+        button.addEventListener('click', function() {
+            const modelType = this.getAttribute('data-model');
+            analyzeImage(modelType);
+            if (analyzeOptions) {
+                analyzeOptions.style.display = 'none';
+            }
+        });
+    });
+});
 
