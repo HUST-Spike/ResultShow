@@ -304,7 +304,7 @@ function displayResult(result) {
     if (result.modelType) {
         switch(result.modelType) {
             case 'integrated':
-                modelTypeValue.textContent = '模型集成：准确率最高';
+                modelTypeValue.textContent = '模型集成';
                 break;
             case 'troika':
                 modelTypeValue.textContent = 'Troika(ViT-L/14)';
@@ -313,7 +313,7 @@ function displayResult(result) {
                 modelTypeValue.textContent = 'DFSP(ViT-L/14)';
                 break;
             case 'dfsp-vit-b32':
-                modelTypeValue.textContent = 'DFSP(ViT-B/32)：推理最快';
+                modelTypeValue.textContent = 'DFSP(ViT-B/32)';
                 break;
             default:
                 modelTypeValue.textContent = result.modelType;
